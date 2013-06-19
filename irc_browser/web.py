@@ -37,15 +37,16 @@ def channel(environ, start_response):
 
     try:
         entries = os.listdir(dirpath)
-    except OSError:
-        return #not_found(environ, start_response) # XXX: must not return anything inside generator
-
-    start_response("200 OK", [("Content-Type", "text/html; charset=UTF-8")])
-    yield "<ul>"
-    for entry in entries:
-        uri = "/%s/%s" % (url_encode(channel), url_encode(entry))
-        yield '<li><a href="%s">%s</a></li>' % (uri, entry)
-    yield "</ul>"
+    except (OSError, IOError):
+        start_response("404 Not Found", [])
+        yield "Not Found"
+    else:
+        start_response("200 OK", [("Content-Type", "text/html; charset=UTF-8")])
+        yield "<ul>"
+        for entry in entries:
+            uri = "/%s/%s" % (url_encode(channel), url_encode(entry))
+            yield '<li><a href="%s">%s</a></li>' % (uri, entry)
+        yield "</ul>"
 
 
 def conversation(environ, start_response):
@@ -54,15 +55,16 @@ def conversation(environ, start_response):
 
     try:
         fh = open(filepath)
-    except OSError:
-        return #not_found(environ, start_response) # XXX: must not return anything inside generator
-
-    start_response("200 OK", [("Content-Type", "text/html; charset=UTF-8")])
-    yield "<ol>"
-    for i, line in enumerate(fh):
-        i += 1
-        yield '<li><a href="#l%s" name="l%s">%s</a></li>' % (i, i, line)
-    yield "</ol>"
+    except (OSError, IOError):
+        start_response("404 Not Found", [])
+        yield "Not Found"
+    else:
+        start_response("200 OK", [("Content-Type", "text/html; charset=UTF-8")])
+        yield "<ol>"
+        for i, line in enumerate(fh):
+            i += 1
+            yield '<li><a href="#l%s" name="l%s">%s</a></li>' % (i, i, line)
+        yield "</ol>"
 
 
 def not_found(environ, start_response):
