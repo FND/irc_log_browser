@@ -1,0 +1,12 @@
+#!/usr/bin/env python
+
+from wsgiref.simple_server import make_server
+
+from irc_browser.web import app
+
+host = "localhost"
+port = 8080
+
+print "serving at http://%s:%s"% (host, port)
+srv = make_server(host, port, app)
+srv.serve_forever()
