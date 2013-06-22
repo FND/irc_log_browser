@@ -25,7 +25,7 @@ def app(environ, start_response):
 def root(environ, start_response):
     start_response("200 OK", [("Content-Type", "text/html; charset=UTF-8")])
     yield "<ul>"
-    for channel in determine_channels(ROOT_PATH):
+    for channel in os.listdir(ROOT_PATH):
         uri = "/%s" % url_encode(channel)
         yield '<li><a href="%s">%s</a></li>' % (uri, channel)
     yield "</ul>"
@@ -70,7 +70,3 @@ def conversation(environ, start_response):
 def not_found(environ, start_response):
         start_response("404 Not Found", [])
         return ["Not Found"]
-
-
-def determine_channels(root_path):
-    return os.listdir(root_path)
