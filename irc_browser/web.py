@@ -118,7 +118,7 @@ def search_in_file(query, filepath):
     with open(filepath) as fh:
         for i, line in enumerate(fh):
             line = line.rstrip()
-            if query in line:
+            if query.lower() in line.lower():
                 matches.append((i + 1, line))
 
     return matches
